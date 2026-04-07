@@ -29,6 +29,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title: digest.seo?.metaTitle || digest.title,
     description: digest.seo?.metaDescription || digest.summary || '',
+    alternates: { canonical: `/digest/${params.slug}` },
+    openGraph: {
+      title: digest.seo?.metaTitle || digest.title,
+      description: digest.seo?.metaDescription || digest.summary || '',
+    },
   }
 }
 

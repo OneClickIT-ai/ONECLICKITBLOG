@@ -19,12 +19,17 @@ export const metadata: Metadata = {
     template: `%s | ${SITE_NAME}`,
   },
   description: 'Tech news, buyer guides, and trend analysis delivered daily.',
+  icons: {
+    icon: '/images/icon.svg',
+    apple: '/images/icon.svg',
+  },
   openGraph: {
     type: 'website',
     locale: 'en_US',
     siteName: SITE_NAME,
     title: SITE_NAME,
     description: 'Tech news, buyer guides, and trend analysis delivered daily.',
+    images: [{ url: '/images/logo.svg', width: 520, height: 60 }],
   },
   twitter: {
     card: 'summary_large_image',
@@ -34,7 +39,7 @@ export const metadata: Metadata = {
     follow: true,
   },
   alternates: {
-    canonical: SITE_URL,
+    canonical: '/',
   },
 }
 

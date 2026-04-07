@@ -27,6 +27,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title: data.category.title,
     description: data.category.description || `Posts in ${data.category.title}`,
+    alternates: { canonical: `/category/${params.slug}` },
+    openGraph: {
+      title: data.category.title,
+      description: data.category.description || `Posts in ${data.category.title}`,
+    },
   }
 }
 

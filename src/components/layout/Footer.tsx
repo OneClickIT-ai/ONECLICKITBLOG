@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { SITE_NAME } from '@/lib/constants'
 import type { SiteSettings } from '@/types/sanity'
 
@@ -8,7 +9,16 @@ export function Footer({ settings }: { settings: SiteSettings | null }) {
       <div className="mx-auto max-w-6xl px-4 py-10">
         <div className="grid gap-8 md:grid-cols-3">
           <div>
-            <h3 className="mb-3 font-bold">{settings?.title || SITE_NAME}</h3>
+            <div className="mb-3 flex items-center gap-2">
+              <Image
+                src="/images/icon.svg"
+                alt=""
+                width={28}
+                height={28}
+                className="dark:brightness-150"
+              />
+              <h3 className="font-bold">{settings?.title || SITE_NAME}</h3>
+            </div>
             <p className="text-sm text-gray-600 dark:text-gray-400">
               {settings?.description || 'Tech news, guides, and trend analysis.'}
             </p>

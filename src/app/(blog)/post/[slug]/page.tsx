@@ -11,7 +11,9 @@ import { ShareBar } from '@/components/blog/ShareBar'
 import { AffiliateProductCard } from '@/components/monetization/AffiliateProductCard'
 import { ArticleJsonLd, ProductListJsonLd } from '@/components/seo/JsonLd'
 import { TableOfContents } from '@/components/blog/TableOfContents'
-import { formatDate } from '@/lib/utils'
+import { ReadingProgress } from '@/components/blog/ReadingProgress'
+import { BackToTop } from '@/components/blog/BackToTop'
+import { formatDate, estimateReadingTime } from '@/lib/utils'
 import Link from 'next/link'
 
 interface PageProps {
@@ -45,6 +47,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     return {
       title: guide.seo?.metaTitle || guide.title,
       description: guide.seo?.metaDescription || '',
+      alternates: { canonical: `/post/${params.slug}` },
       openGraph: {
         title: guide.seo?.metaTitle || guide.title,
         description: guide.seo?.metaDescription || '',
@@ -56,6 +59,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title: post.seo?.metaTitle || post.title,
     description: post.seo?.metaDescription || post.excerpt || '',
+    alternates: { canonical: `/post/${params.slug}` },
     openGraph: {
       title: post.seo?.metaTitle || post.title,
       description: post.seo?.metaDescription || post.excerpt || '',
@@ -161,7 +165,11 @@ export default async function PostPage({ params }: PageProps) {
   }
 
   // Render original post
+  const readingTime = post!.body ? estimateReadingTime(post!.body) : 1
+
   return (
+    <>
+    <ReadingProgress />
     <article className="mx-auto max-w-3xl px-4 py-8">
       <ArticleJsonLd
         title={post!.title}
@@ -185,6 +193,7 @@ export default async function PostPage({ params }: PageProps) {
       <div className="mt-4 flex items-center gap-4 text-sm text-gray-500">
         {post!.author && <span>By {post!.author.name}</span>}
         {post!.publishedAt && <time>{formatDate(post!.publishedAt)}</time>}
+        <span>{readingTime} min read</span>
       </div>
 
       {post!.mainImage?.asset && (
@@ -219,5 +228,7 @@ export default async function PostPage({ params }: PageProps) {
 
       {post!.related && <RelatedPosts posts={post!.related} />}
     </article>
+    <BackToTop />
+    </>
   )
 }

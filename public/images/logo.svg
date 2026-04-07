@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 60" fill="none">
+  <!-- Monitor/screen icon -->
+  <g transform="translate(0, 2)">
+    <!-- Screen body -->
+    <rect x="2" y="4" width="44" height="32" rx="3" stroke="#1a4a5c" stroke-width="3" fill="none"/>
+    <!-- Screen content lines -->
+    <line x1="10" y1="14" x2="30" y2="14" stroke="#1a4a5c" stroke-width="2" stroke-linecap="round"/>
+    <line x1="10" y1="20" x2="36" y2="20" stroke="#1a4a5c" stroke-width="2" stroke-linecap="round"/>
+    <line x1="10" y1="26" x2="26" y2="26" stroke="#1a4a5c" stroke-width="2" stroke-linecap="round"/>
+    <!-- Stand -->
+    <line x1="24" y1="36" x2="24" y2="44" stroke="#1a4a5c" stroke-width="3" stroke-linecap="round"/>
+    <line x1="14" y1="44" x2="34" y2="44" stroke="#1a4a5c" stroke-width="3" stroke-linecap="round"/>
+    <!-- Mouse/cursor -->
+    <path d="M34 28 L42 36 L38 37 L41 43 L39 44 L36 38 L33 41 Z" fill="#2b7a8e" stroke="#1a4a5c" stroke-width="1"/>
+    <!-- Circuit dot -->
+    <circle cx="8" cy="32" r="2" fill="#2b7a8e"/>
+    <line x1="8" y1="34" x2="8" y2="38" stroke="#2b7a8e" stroke-width="1.5"/>
+  </g>
+  <!-- Text -->
+  <text x="58" y="38" font-family="system-ui, -apple-system, sans-serif" font-weight="700" font-size="32">
+    <tspan fill="#1a3a4a">OneClick</tspan><tspan fill="#1a3a4a">IT</tspan><tspan fill="#2b7a8e">.</tspan><tspan fill="#2b7a8e">blog</tspan>
+  </text>
+</svg>

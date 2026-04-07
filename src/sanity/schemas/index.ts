@@ -14,6 +14,7 @@ import originalPost from './documents/originalPost'
 import newsDigest from './documents/newsDigest'
 import buyerGuide from './documents/buyerGuide'
 import trendRadar from './documents/trendRadar'
+import subscriber from './documents/subscriber'
 
 export const schemaTypes = [
   // Objects
@@ -31,4 +32,5 @@ export const schemaTypes = [
   newsDigest,
   buyerGuide,
   trendRadar,
+  subscriber,
 ]

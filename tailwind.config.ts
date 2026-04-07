@@ -12,6 +12,11 @@ const config: Config = {
       colors: {
         background: 'var(--background)',
         foreground: 'var(--foreground)',
+        brand: {
+          DEFAULT: '#1a3a4a',
+          accent: '#2b7a8e',
+          light: '#5ba8b8',
+        },
       },
       fontFamily: {
         sans: ['var(--font-inter)'],
