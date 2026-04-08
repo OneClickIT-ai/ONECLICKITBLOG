@@ -134,6 +134,12 @@ export const siteSettingsQuery = groq`*[_type == "siteSettings"][0] {
   socialLinks
 }`
 
+// ── Digest archive ────────────────────────────────────────
+export const allDigestsQuery = groq`*[_type == "news_digest" && status == "published"] | order(publishedAt desc)[0...50] {
+  _id, title, "slug": slug.current, summary, publishedAt,
+  "itemCount": count(items)
+}`
+
 // ── Sitemap helpers ───────────────────────────────────────
 export const allPostSlugsQuery = groq`*[_type == "original_post" && defined(slug.current)] {
   "slug": slug.current, _updatedAt

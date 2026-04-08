@@ -9,6 +9,11 @@ import { TrendingUp, Minus, TrendingDown } from 'lucide-react'
 export const metadata: Metadata = {
   title: 'Trend Radar',
   description: 'Discover emerging tech trends, rising topics, and what to watch.',
+  alternates: { canonical: '/trend-radar' },
+  openGraph: {
+    title: 'Trend Radar',
+    description: 'Discover emerging tech trends, rising topics, and what to watch.',
+  },
 }
 
 const momentumIcon = {

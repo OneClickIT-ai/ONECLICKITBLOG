@@ -1,20 +1,13 @@
 import { type NextRequest, NextResponse } from 'next/server'
+import { runIngestionPipeline } from '@/lib/ingestion'
 
 /**
  * RSS Ingestion API endpoint
  *
- * This endpoint is called by a cron job or external worker to trigger
- * RSS feed ingestion. It reads from configured sources, normalizes items,
- * deduplicates, and creates draft digest entries in Sanity.
+ * Called by Vercel Cron (every 30 min) or manually.
+ * Pipeline: fetch sources → parse feeds → normalize → dedup → assemble digest
  *
- * Authentication: Bearer token via CRON_SECRET env var
- *
- * Future implementation:
- * 1. Fetch active sources from Sanity
- * 2. Poll each source's RSS feed
- * 3. Normalize and deduplicate items
- * 4. Score and categorize items
- * 5. Create draft news_digest with digestItems in Sanity
+ * Auth: Bearer {CRON_SECRET}
  */
 function checkAuth(req: NextRequest) {
   const authHeader = req.headers.get('authorization')
@@ -36,21 +29,24 @@ async function handleIngest(req: NextRequest) {
   }
 
   try {
-    // TODO: Implement RSS ingestion pipeline
-    // const sources = await sanityFetch({ query: activeSourcesQuery })
-    // for (const source of sources) {
-    //   const feed = await parseFeed(source.url)
-    //   const items = deduplicateItems(feed.items)
-    //   await createDraftDigest(items)
-    // }
+    const result = await runIngestionPipeline()
 
-    return NextResponse.json({
-      success: true,
-      message: 'Ingestion endpoint ready. Implementation pending.',
-      timestamp: new Date().toISOString(),
-    })
+    const status = result.errors.length > 0 && result.itemsNew === 0 ? 207 : 200
+
+    return NextResponse.json(
+      {
+        success: true,
+        timestamp: new Date().toISOString(),
+        ...result,
+      },
+      { status },
+    )
   } catch (err) {
     console.error('Ingestion error:', err)
-    return new NextResponse('Internal error', { status: 500 })
+    const message = err instanceof Error ? err.message : 'Unknown error'
+    return NextResponse.json(
+      { success: false, error: message, timestamp: new Date().toISOString() },
+      { status: 500 },
+    )
   }
 }
