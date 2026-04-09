@@ -26,7 +26,7 @@ describe('formatDate', () => {
 
   it('handles date-only strings', () => {
     // Use a mid-month date to avoid day rollover across timezones
-    const result = formatDate('2024-01-15T12:00:00Z')
+    const result = formatDate('2024-01-15')
     expect(result).toContain('January')
     expect(result).toContain('2024')
   })
