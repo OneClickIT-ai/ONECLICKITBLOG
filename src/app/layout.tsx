@@ -5,6 +5,7 @@ import { ThemeProvider } from '@/components/layout/ThemeProvider'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { ConsentBanner } from '@/components/layout/ConsentBanner'
+import { BackToTop } from '@/components/ui/BackToTop'
 import { sanityFetch } from '@/sanity/fetch'
 import { allCategoriesQuery, siteSettingsQuery } from '@/sanity/lib/queries'
 import type { Category, SiteSettings } from '@/types/sanity'
@@ -35,6 +36,9 @@ export const metadata: Metadata = {
   },
   alternates: {
     canonical: SITE_URL,
+    types: {
+      'application/rss+xml': `${SITE_URL}/feed.xml`,
+    },
   },
 }
 
@@ -52,9 +56,13 @@ export default async function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.variable} font-sans antialiased`}>
         <ThemeProvider>
+          <a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-blue-600 focus:px-4 focus:py-2 focus:text-white">
+            Skip to content
+          </a>
           <Header categories={categories || []} />
-          <main className="min-h-screen">{children}</main>
+          <main id="main-content" className="min-h-screen">{children}</main>
           <Footer settings={settings} />
+          <BackToTop />
           <ConsentBanner />
         </ThemeProvider>
       </body>

@@ -156,3 +156,19 @@ export const allDigestSlugsQuery = groq`*[_type == "news_digest" && defined(slug
 export const allCategorySlugsQuery = groq`*[_type == "category" && defined(slug.current)] {
   "slug": slug.current, _updatedAt
 }`
+
+// ── Search ───────────────────────────────────────────────
+export const searchQuery = groq`*[_type in ["original_post", "buyer_guide"] && (title match $term || excerpt match $term)] | order(publishedAt desc)[0...20] {
+  _id, _type, title, "slug": slug.current, excerpt, publishedAt,
+  "mainImage": mainImage { ${imageFields} },
+  ${categoryRef}
+}`
+
+// ── All posts (paginated) ────────────────────────────────
+export const allPostsPageQuery = groq`*[_type in ["original_post", "buyer_guide"]] | order(publishedAt desc)[$start...$end] {
+  _id, _type, title, "slug": slug.current, excerpt, publishedAt,
+  "mainImage": mainImage { ${imageFields} },
+  ${categoryRef}
+}`
+
+export const allPostsCountQuery = groq`count(*[_type in ["original_post", "buyer_guide"]])`
