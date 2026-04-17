@@ -40,11 +40,7 @@ async function handleTrends(req: NextRequest) {
     // const scored = scoreOpportunities(signals)
     // await upsertTrendRadar(scored)
 
-    return NextResponse.json({
-      success: true,
-      message: 'Trend discovery endpoint ready. Implementation pending.',
-      timestamp: new Date().toISOString(),
-    })
+    return NextResponse.json({ message: 'Not implemented' }, { status: 501 })
   } catch (err) {
     console.error('Trend discovery error:', err)
     return new NextResponse('Internal error', { status: 500 })

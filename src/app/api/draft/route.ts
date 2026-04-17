@@ -32,11 +32,7 @@ export async function POST(req: NextRequest) {
     // const draft = await expandDraft(outline)
     // const doc = await createDraftInSanity(draft)
 
-    return NextResponse.json({
-      success: true,
-      message: 'Draft generation endpoint ready. Implementation pending.',
-      timestamp: new Date().toISOString(),
-    })
+    return NextResponse.json({ message: 'Not implemented' }, { status: 501 })
   } catch (err) {
     console.error('Draft generation error:', err)
     return new NextResponse('Internal error', { status: 500 })
