@@ -63,6 +63,8 @@ export interface DigestItem {
   source?: { name: string; slug: string }
   summary?: string
   aiTake?: string
+  priority?: 'breaking' | 'high' | 'medium' | 'low'
+  category?: { title: string; slug: string }
   image?: SanityImage
 }
 
@@ -139,6 +141,13 @@ export interface SiteSettings {
     github?: string
     linkedin?: string
   }
+}
+
+// ── Breaking news ────────────────────────────────────────
+export interface BreakingDigestSlice {
+  items: DigestItem[]
+  digestSlug: string
+  publishedAt?: string
 }
 
 // ── Homepage ─────────────────────────────────────────────

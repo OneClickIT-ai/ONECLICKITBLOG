@@ -10,11 +10,11 @@ function toDigestItem(item: NormalizedItem) {
     _key: item.hash,
     headline: item.headline,
     sourceUrl: item.sourceUrl,
-    source: {
-      _type: 'reference',
-      _ref: item.sourceRef,
-    },
+    source: { _type: 'reference', _ref: item.sourceRef },
     summary: item.summary,
+    ...(item.aiTake ? { aiTake: item.aiTake } : {}),
+    ...(item.priority ? { priority: item.priority } : { priority: 'medium' }),
+    ...(item.categoryRef ? { category: { _type: 'reference', _ref: item.categoryRef } } : {}),
   }
 }
 

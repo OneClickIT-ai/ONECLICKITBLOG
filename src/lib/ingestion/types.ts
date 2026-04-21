@@ -32,6 +32,8 @@ export interface NormalizedItem {
   publishedAt: string
   hash: string        // SHA-256 of guid or link for dedup
   categoryRef?: string // Sanity category _id
+  priority?: 'breaking' | 'high' | 'medium' | 'low'
+  aiTake?: string
 }
 
 /** Result of the full ingestion run */

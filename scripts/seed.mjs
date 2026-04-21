@@ -36,6 +36,8 @@ async function seed() {
     { title: 'Development Tools', slug: 'dev-tools', icon: 'code', description: 'IDEs, frameworks, libraries, and productivity tools for developers.' },
     { title: 'Hardware & Gadgets', slug: 'hardware', icon: 'monitor', description: 'Laptops, peripherals, servers, and consumer electronics reviews.' },
     { title: 'Networking', slug: 'networking', icon: 'wifi', description: 'Routers, switches, firewalls, SD-WAN, and network management.' },
+    { title: 'Open Source', slug: 'open-source', icon: 'github', description: 'Open source projects, releases, and community news.' },
+    { title: 'Startups & Funding', slug: 'startups', icon: 'rocket', description: 'Startup launches, funding rounds, acquisitions, and exits.' },
   ]
 
   const catRefs = {}
@@ -66,11 +68,35 @@ async function seed() {
   // ── Sources ─────────────────────────────────────────────
   console.log('Creating RSS sources...')
   const sources = [
-    { name: 'The Verge', slug: 'the-verge', url: 'https://www.theverge.com/rss/index.xml', cat: 'dev-tools' },
-    { name: 'Ars Technica', slug: 'ars-technica', url: 'https://feeds.arstechnica.com/arstechnica/index', cat: 'hardware' },
+    // AI & Machine Learning
     { name: 'TechCrunch', slug: 'techcrunch', url: 'https://techcrunch.com/feed/', cat: 'ai-ml' },
-    { name: 'Hacker News', slug: 'hacker-news', url: 'https://hnrss.org/frontpage', cat: 'dev-tools' },
+    { name: 'VentureBeat', slug: 'venturebeat', url: 'https://venturebeat.com/feed/', cat: 'ai-ml' },
+    { name: 'MIT Technology Review', slug: 'mit-tech-review', url: 'https://www.technologyreview.com/feed/', cat: 'ai-ml' },
+    { name: 'The Decoder', slug: 'the-decoder', url: 'https://the-decoder.com/feed/', cat: 'ai-ml' },
+    // Cybersecurity
     { name: 'Krebs on Security', slug: 'krebs-security', url: 'https://krebsonsecurity.com/feed/', cat: 'cybersecurity' },
+    { name: 'Bleeping Computer', slug: 'bleeping-computer', url: 'https://www.bleepingcomputer.com/feed/', cat: 'cybersecurity' },
+    { name: 'The Hacker News', slug: 'the-hacker-news', url: 'https://feeds.feedburner.com/TheHackersNews', cat: 'cybersecurity' },
+    { name: 'Schneier on Security', slug: 'schneier-security', url: 'https://www.schneier.com/feed/', cat: 'cybersecurity' },
+    { name: 'SANS ISC', slug: 'sans-isc', url: 'https://isc.sans.edu/rssfeed.xml', cat: 'cybersecurity' },
+    // Cloud & DevOps
+    { name: 'The New Stack', slug: 'the-new-stack', url: 'https://thenewstack.io/feed/', cat: 'cloud-devops' },
+    { name: 'InfoQ', slug: 'infoq', url: 'https://www.infoq.com/feed/', cat: 'cloud-devops' },
+    { name: 'AWS News Blog', slug: 'aws-news', url: 'https://aws.amazon.com/blogs/aws/feed/', cat: 'cloud-devops' },
+    // Development Tools & General Tech
+    { name: 'The Verge', slug: 'the-verge', url: 'https://www.theverge.com/rss/index.xml', cat: 'dev-tools' },
+    { name: 'Hacker News', slug: 'hacker-news', url: 'https://hnrss.org/frontpage', cat: 'dev-tools' },
+    { name: 'GitHub Blog', slug: 'github-blog', url: 'https://github.blog/feed/', cat: 'dev-tools' },
+    { name: 'Smashing Magazine', slug: 'smashing-magazine', url: 'https://www.smashingmagazine.com/feed/', cat: 'dev-tools' },
+    { name: 'The Register', slug: 'the-register', url: 'https://www.theregister.com/headlines.atom', cat: 'dev-tools' },
+    // Hardware
+    { name: 'Ars Technica', slug: 'ars-technica', url: 'https://feeds.arstechnica.com/arstechnica/index', cat: 'hardware' },
+    { name: "Tom's Hardware", slug: 'toms-hardware', url: 'https://www.tomshardware.com/feeds/all', cat: 'hardware' },
+    // Open Source
+    { name: 'Open Source Initiative', slug: 'osi', url: 'https://opensource.org/news/feed', cat: 'open-source' },
+    // Startups & Funding
+    { name: 'TechCrunch Startups', slug: 'techcrunch-startups', url: 'https://techcrunch.com/category/startups/feed/', cat: 'startups' },
+    { name: 'Product Hunt', slug: 'product-hunt', url: 'https://www.producthunt.com/feed', cat: 'startups' },
   ]
 
   const sourceRefs = {}
