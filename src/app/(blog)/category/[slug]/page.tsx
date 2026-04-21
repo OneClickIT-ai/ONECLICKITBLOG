@@ -6,28 +6,33 @@ import type { CategoryPageData, SlugItem } from '@/types/sanity'
 import { PostCard } from '@/components/blog/PostCard'
 
 interface PageProps {
-  params: { slug: string }
+  params: Promise<{ slug: string }>
 }
 
 export async function generateStaticParams() {
-  const categories = await sanityFetch<SlugItem[]>({
-    query: allCategorySlugsQuery,
-    tags: ['category'],
-  })
-  return (categories || []).map((c) => ({ slug: c.slug }))
+  try {
+    const categories = await sanityFetch<SlugItem[]>({
+      query: allCategorySlugsQuery,
+      tags: ['category'],
+    })
+    return (categories || []).map((c) => ({ slug: c.slug }))
+  } catch {
+    return []
+  }
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { slug } = await params
   const data = await sanityFetch<CategoryPageData>({
     query: categoryBySlugQuery,
-    params: { slug: params.slug },
+    params: { slug },
     tags: ['category', 'post'],
   })
   if (!data?.category) return {}
   return {
     title: data.category.title,
     description: data.category.description || `Posts in ${data.category.title}`,
-    alternates: { canonical: `/category/${params.slug}` },
+    alternates: { canonical: `/category/${slug}` },
     openGraph: {
       title: data.category.title,
       description: data.category.description || `Posts in ${data.category.title}`,
@@ -36,9 +41,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export default async function CategoryPage({ params }: PageProps) {
+  const { slug } = await params
   const data = await sanityFetch<CategoryPageData>({
     query: categoryBySlugQuery,
-    params: { slug: params.slug },
+    params: { slug },
     tags: ['category', 'post'],
   })
 
