@@ -2,6 +2,7 @@ import { getWriteClient } from './sanity-write-client'
 import { parseFeed } from './feed-parser'
 import { normalizeItems, deduplicateItems, scoreByRecency } from './dedup'
 import { assembleDigest } from './digest-assembler'
+import { enrichItems } from './ai-summarizer'
 import { activeSourcesQuery, existingHashesQuery, todayDraftDigestQuery } from './queries'
 import type { IngestionSource, IngestionResult } from './types'
 
@@ -85,8 +86,9 @@ export async function runIngestionPipeline(): Promise<IngestionResult> {
     }
   }
 
-  // 5. Score and cap
-  const ranked = scoreByRecency(newItems).slice(0, MAX_DIGEST_ITEMS)
+  // 5. Score, cap, then AI-enrich (priority + aiTake)
+  const scored = scoreByRecency(newItems).slice(0, MAX_DIGEST_ITEMS)
+  const ranked = await enrichItems(scored)
 
   // 6. Check for today's existing draft, then assemble
   const now = new Date()

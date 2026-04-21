@@ -86,11 +86,10 @@ export const guideBySlugQuery = groq`*[_type == "buyer_guide" && slug.current ==
 export const digestBySlugQuery = groq`*[_type == "news_digest" && slug.current == $slug][0] {
   _id, title, "slug": slug.current, summary, publishedAt, status,
   items[] {
-    headline, sourceUrl, summary, aiTake,
+    headline, sourceUrl, summary, aiTake, priority,
     "image": image { ${imageFields} },
-    source->{
-      name, "slug": slug.current
-    }
+    source->{ name, "slug": slug.current },
+    category->{ title, "slug": slug.current }
   },
   ${seoFields}
 }`
@@ -118,6 +117,17 @@ export const trendRadarQuery = groq`*[_type == "trend_radar"] | order(publishedA
     }
   },
   ${seoFields}
+}`
+
+// ── Breaking / High-priority items ───────────────────────
+export const breakingItemsQuery = groq`*[_type == "news_digest" && status == "published"] | order(publishedAt desc)[0...5] {
+  "items": items[priority in ["breaking", "high"]][0...3] {
+    headline, sourceUrl, summary, aiTake, priority,
+    source->{ name, "slug": slug.current },
+    category->{ title, "slug": slug.current }
+  },
+  "digestSlug": slug.current,
+  publishedAt
 }`
 
 // ── Navigation & Settings ─────────────────────────────────

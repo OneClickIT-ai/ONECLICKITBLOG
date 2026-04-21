@@ -1,16 +1,17 @@
 import { sanityFetch } from '@/sanity/fetch'
-import { homepageQuery, trendRadarQuery } from '@/sanity/lib/queries'
-import type { HomepageData, TrendRadar } from '@/types/sanity'
+import { homepageQuery, trendRadarQuery, breakingItemsQuery } from '@/sanity/lib/queries'
+import type { HomepageData, TrendRadar, BreakingDigestSlice } from '@/types/sanity'
 import { FeaturedHero } from '@/components/blog/FeaturedHero'
 import { PostCard } from '@/components/blog/PostCard'
 import { TrendingModule } from '@/components/blog/TrendingModule'
+import { BreakingNewsFeed } from '@/components/blog/BreakingNewsFeed'
 import { NewsletterCta } from '@/components/cta/NewsletterCta'
 import { LiveStatsTicker } from '@/components/blog/LiveStatsTicker'
 import Link from 'next/link'
 import { formatDate } from '@/lib/utils'
 
 export default async function HomePage() {
-  const [data, radar] = await Promise.all([
+  const [data, radar, breakingSlices] = await Promise.all([
     sanityFetch<HomepageData | null>({
       query: homepageQuery,
       tags: ['post', 'guide', 'digest'],
@@ -19,6 +20,10 @@ export default async function HomePage() {
       query: trendRadarQuery,
       tags: ['trend'],
     }),
+    sanityFetch<BreakingDigestSlice[]>({
+      query: breakingItemsQuery,
+      tags: ['digest'],
+    }),
   ])
 
   const featured = data?.featured || []
@@ -26,11 +31,15 @@ export default async function HomePage() {
   const latestDigest = data?.latestDigest || null
   const guides = data?.guides || []
   const trends = radar?.trends || []
+  const breaking = breakingSlices || []
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-8">
       {/* Global Threat Monitor */}
       <LiveStatsTicker />
+
+      {/* Breaking & Top Stories */}
+      <BreakingNewsFeed slices={breaking} />
 
       {/* Featured */}
       {featured.length > 0 && <FeaturedHero posts={featured} />}
