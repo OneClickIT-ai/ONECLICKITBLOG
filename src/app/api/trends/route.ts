@@ -3,6 +3,8 @@ import { groq } from 'next-sanity'
 import { getWriteClient } from '@/lib/ingestion/sanity-write-client'
 import { extractKeywords } from '@/lib/trends/extractor'
 
+type CategoryRow = { _id: string; slug: string }
+
 // Fetch all headlines from digest items published in the past N days
 const recentHeadlinesQuery = groq`*[
   _type == "news_digest"
@@ -88,12 +90,9 @@ async function handleTrends(req: NextRequest) {
     }
 
     // Fetch categories for reference resolution
-    type CategoryRow = { _id: string; slug: string }
     const categories =
       (await client.fetch<CategoryRow[]>(allCategoriesQuery)) || []
-    const catMap = new Map(
-      (categories as CategoryRow[]).map((c) => [c.slug, c._id]),
-    )
+    const catMap = new Map(categories.map((c) => [c.slug, c._id]))
 
     // Build trendItem array (top 12 keywords)
     const trendItems = keywords.slice(0, 12).map((kw, i) => {

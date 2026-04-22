@@ -6,18 +6,17 @@ import { getWriteClient } from '@/lib/ingestion/sanity-write-client'
  * Auto-publish cron endpoint.
  *
  * Called daily at 20:00 UTC by Vercel Cron.
- * Finds draft digests that have accumulated enough stories and publishes them.
- * A digest is "ready" when it has >= MIN_ITEMS items.
+ * Finds draft digests that have accumulated >= 10 stories and publishes them.
  *
  * Auth: Bearer {CRON_SECRET}
  */
 
-const MIN_ITEMS = 10
+type DigestRow = { _id: string; title: string; itemCount: number }
 
 const draftsReadyQuery = groq`*[
   _type == "news_digest"
   && status == "draft"
-  && count(items) >= ${MIN_ITEMS}
+  && count(items) >= 10
 ] {
   _id,
   title,
@@ -46,22 +45,18 @@ async function handlePublish(req: NextRequest) {
   try {
     const client = getWriteClient()
     const drafts =
-      (await client.fetch<
-        { _id: string; title: string; itemCount: number }[]
-      >(draftsReadyQuery)) || []
+      (await client.fetch<DigestRow[]>(draftsReadyQuery)) || []
 
     if (drafts.length === 0) {
       return NextResponse.json({
         success: true,
         published: 0,
-        message: `No draft digests with >= ${MIN_ITEMS} items.`,
+        message: 'No draft digests with >= 10 items.',
       })
     }
 
-    type DigestRow = { _id: string; title: string; itemCount: number }
-
     await Promise.all(
-      (drafts as DigestRow[]).map((d) =>
+      drafts.map((d) =>
         client.patch(d._id).set({ status: 'published' }).commit(),
       ),
     )
@@ -69,7 +64,7 @@ async function handlePublish(req: NextRequest) {
     return NextResponse.json({
       success: true,
       published: drafts.length,
-      digests: (drafts as DigestRow[]).map((d) => ({
+      digests: drafts.map((d) => ({
         id: d._id,
         title: d.title,
         itemCount: d.itemCount,
