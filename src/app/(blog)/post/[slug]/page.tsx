@@ -17,7 +17,7 @@ import { formatDate, estimateReadingTime } from '@/lib/utils'
 import Link from 'next/link'
 
 interface PageProps {
-  params: { slug: string }
+  params: Promise<{ slug: string }>
 }
 
 export async function generateStaticParams() {
@@ -31,23 +31,24 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { slug } = await params
   const post = await sanityFetch<Post | null>({
     query: postBySlugQuery,
-    params: { slug: params.slug },
+    params: { slug },
     tags: ['post'],
   })
 
   if (!post) {
     const guide = await sanityFetch<BuyerGuide | null>({
       query: guideBySlugQuery,
-      params: { slug: params.slug },
+      params: { slug },
       tags: ['guide'],
     })
     if (!guide) return {}
     return {
       title: guide.seo?.metaTitle || guide.title,
       description: guide.seo?.metaDescription || '',
-      alternates: { canonical: `/post/${params.slug}` },
+      alternates: { canonical: `/post/${slug}` },
       openGraph: {
         title: guide.seo?.metaTitle || guide.title,
         description: guide.seo?.metaDescription || '',
@@ -59,7 +60,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title: post.seo?.metaTitle || post.title,
     description: post.seo?.metaDescription || post.excerpt || '',
-    alternates: { canonical: `/post/${params.slug}` },
+    alternates: { canonical: `/post/${slug}` },
     openGraph: {
       title: post.seo?.metaTitle || post.title,
       description: post.seo?.metaDescription || post.excerpt || '',
@@ -73,10 +74,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export default async function PostPage({ params }: PageProps) {
+  const { slug } = await params
   // Try original_post first, then buyer_guide
   const post = await sanityFetch<Post | null>({
     query: postBySlugQuery,
-    params: { slug: params.slug },
+    params: { slug },
     tags: ['post'],
   })
 
@@ -84,7 +86,7 @@ export default async function PostPage({ params }: PageProps) {
     ? null
     : await sanityFetch<BuyerGuide | null>({
         query: guideBySlugQuery,
-        params: { slug: params.slug },
+        params: { slug },
         tags: ['guide'],
       })
 

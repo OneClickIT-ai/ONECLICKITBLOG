@@ -8,7 +8,7 @@ import { ArticleJsonLd } from '@/components/seo/JsonLd'
 import { formatDate } from '@/lib/utils'
 
 interface PageProps {
-  params: { slug: string }
+  params: Promise<{ slug: string }>
 }
 
 export async function generateStaticParams() {
@@ -20,16 +20,17 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { slug } = await params
   const digest = await sanityFetch<Digest | null>({
     query: digestBySlugQuery,
-    params: { slug: params.slug },
+    params: { slug },
     tags: ['digest'],
   })
   if (!digest) return {}
   return {
     title: digest.seo?.metaTitle || digest.title,
     description: digest.seo?.metaDescription || digest.summary || '',
-    alternates: { canonical: `/digest/${params.slug}` },
+    alternates: { canonical: `/digest/${slug}` },
     openGraph: {
       title: digest.seo?.metaTitle || digest.title,
       description: digest.seo?.metaDescription || digest.summary || '',
@@ -38,9 +39,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export default async function DigestPage({ params }: PageProps) {
+  const { slug } = await params
   const digest = await sanityFetch<Digest | null>({
     query: digestBySlugQuery,
-    params: { slug: params.slug },
+    params: { slug },
     tags: ['digest'],
   })
 
